@@ -17,12 +17,13 @@
     self.Board.prototype = {
         get elements() {
             var elements = this.bars;
-           elements.push(this.ball);
+            elements.push(this.ball);
             return elements;
         }
     }
 
 })();
+
 
 (function () {
     self.Bar = function (x, y, width, height, board) {
@@ -33,15 +34,19 @@
         this.board = board;
         this.board.bars.push(this);
         this.kind = "rectangle";
+        this.speed = 10;
     }
 
 
     self.Bar.prototype = {
         down: function () {
-
+            this.y += this.speed;
         },
         up: function () {
-
+            this.y -= this.speed;
+        },
+        toString: function(){
+            return"x: "+ this.x+ " y: "+this.y;
         }
     }
 
@@ -63,9 +68,9 @@
 
     self.BoardView.prototype = {
         draw: function () {
-           
+
             for (var i = this.board.elements.length - 1; i >= 0; i--) {
-            
+
                 var el = this.board.elements[i];
                 draw(this.ctx, el);
             };
@@ -73,7 +78,7 @@
     }
 
     function draw(ctx, element) {
-       if (element != null && element.hasOwnProperty("kind")) {
+        if (element != null && element.hasOwnProperty("kind")) {
             console.log("si entre");
             switch (element.kind) {
                 case "rectangle":
@@ -86,20 +91,33 @@
 
 
 })();
+var board = new Board(800, 400);
+var bar = new Bar(20, 200, 30, 100, board);
+var bar = new Bar(750, 200, 30, 100, board);
+var canvas = document.getElementById("canvas");
+var board_view = new BoardView(canvas, board);
+
+document.addEventListener("keydown", function (ev) {
+   
+    if (ev.keyCode == 38) {
+        bar.up();
+    }
+    else if (ev.keyCode == 40) {
+        bar.down();
+    }
+    console.log(bar.toString());
+});
+
 
 //-----------
 //Main del programa, manda los parametros para las funciones previamente creadas
 //Instancia los objetos y a la vista le manda el modelo (board)
 
-window.addEventListener("load", main);
+self.addEventListener("load", main);
 
 function main() {
     console.log("Hola mundo");
-    var board = new Board(800, 400);
-    var bar = new Bar(20, 100, 40, 100, board);
-    var bar = new Bar(750, 100, 40, 100, board);
-    var canvas = document.getElementById("canvas");
-    var board_view = new BoardView(canvas, board);
+
     console.log(board);
     board_view.draw();
 
