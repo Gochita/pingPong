@@ -1,0 +1,3 @@
+¿Cómo poner límites a las barras para que no se salga la pelota del cuadro?
+¿Se pueden colocar más pelotas?
+¿Se puede llevar un registro de puntos por  cada jugador?
