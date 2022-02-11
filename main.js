@@ -8,6 +8,7 @@
         this.game_over = false;
         this.bars = [];
         this.ball = null;
+        this.playing = false;
     }
 
     // ----------------
@@ -17,7 +18,7 @@
     self.Board.prototype = {
         get elements() {
             //var elements = this.bars;
-            let elements = this.bars.map((bar)=>{ return bar; });
+            let elements = this.bars.map((bar) => { return bar; });
             elements.push(this.ball);
             return elements;
         }
@@ -26,7 +27,7 @@
 })();
 
 (function () {
-    
+
     self.Ball = function (x, y, radius, board) {
         this.x = x;
         this.y = y;
@@ -34,8 +35,17 @@
         this.speed_y = 0;
         this.speed_x = 3;
         this.board = board;
+        this.direction = 1;
+
         board.ball = this;
         this.kind = "circle";
+
+    }
+    self.Ball.prototype = {
+        move: function () {
+            this.x += (this.speed_x * this.direction);
+            this.y += (this.speed_y);
+        }
 
     }
 })();
@@ -94,8 +104,12 @@
             };
         },
         play: function () {
-            this.clean();
-            this.draw();
+            if (this.board.playing) {
+                this.clean();
+                this.draw();
+                this.board.ball.move();
+            }
+
         }
     }
 
@@ -133,7 +147,7 @@ var ball = new Ball(350, 100, 10, board);
 //-------
 //Evento que modifica las cordenadas de y
 document.addEventListener("keydown", function (ev) {
-    
+
     //flecha arriba
     if (ev.keyCode == 38) {
         ev.preventDefault();
@@ -153,6 +167,9 @@ document.addEventListener("keydown", function (ev) {
     else if (ev.keyCode === 83) {
         ev.preventDefault();
         bar_2.down();
+    } else if (ev.keyCode === 32) {
+        ev.preventDefault();
+        board.playing = !board.playing;
     }
 
 });
@@ -162,8 +179,9 @@ document.addEventListener("keydown", function (ev) {
 //Main del programa, manda los parametros para las funciones previamente creadas
 //Instancia los objetos y a la vista le manda el modelo (board)
 
-
+board_view.draw();
 window.requestAnimationFrame(controller);
+
 
 function controller() {
     board_view.play();
