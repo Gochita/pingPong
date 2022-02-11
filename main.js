@@ -16,7 +16,8 @@
 
     self.Board.prototype = {
         get elements() {
-            var elements = this.bars;
+            //var elements = this.bars;
+            let elements = this.bars.map((bar)=>{ return bar; });
             elements.push(this.ball);
             return elements;
         }
@@ -25,7 +26,7 @@
 })();
 
 (function () {
-    //aqui modifique
+    
     self.Ball = function (x, y, radius, board) {
         this.x = x;
         this.y = y;
@@ -49,7 +50,7 @@
         this.board = board;
         this.board.bars.push(this);
         this.kind = "rectangle";
-        this.speed = 40;
+        this.speed = 10;
     }
 
 
@@ -88,7 +89,6 @@
         draw: function () {
 
             for (var i = this.board.elements.length - 1; i >= 0; i--) {
-
                 var el = this.board.elements[i];
                 draw(this.ctx, el);
             };
@@ -133,21 +133,25 @@ var ball = new Ball(350, 100, 10, board);
 //-------
 //Evento que modifica las cordenadas de y
 document.addEventListener("keydown", function (ev) {
-    ev.preventDefault();
+    
     //flecha arriba
     if (ev.keyCode == 38) {
+        ev.preventDefault();
         bar.up();
     }
     //flecha abajo
     else if (ev.keyCode == 40) {
+        ev.preventDefault();
         bar.down();
     }
     //W
     else if (ev.keyCode === 87) {
+        ev.preventDefault();
         bar_2.up();
     }
     //S
     else if (ev.keyCode === 83) {
+        ev.preventDefault();
         bar_2.down();
     }
 
@@ -158,7 +162,7 @@ document.addEventListener("keydown", function (ev) {
 //Main del programa, manda los parametros para las funciones previamente creadas
 //Instancia los objetos y a la vista le manda el modelo (board)
 
-//self.addEventListener("load", main);
+
 window.requestAnimationFrame(controller);
 
 function controller() {
